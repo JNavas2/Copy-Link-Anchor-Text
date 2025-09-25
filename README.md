@@ -53,11 +53,11 @@ Copy the anchor text (link text) of any link easily via context menu or touch mo
 - No data is collected or sent anywhere.
 - Clipboard access is used only when copying.
 - Licensed under MIT License.
-- Source code available on GitHub
+- [Source code available on GitHub]([url](https://github.com/JNavas2/Copy-Link-Anchor-Text))
 - Copyright © 2025 John Navas, All Rights Reserved.
 
 ---
 
 ## Support
 
-For questions, bug reports, or feature requests, please open an issue on GitHub.
+For questions, bug reports, or feature requests, please open an [issue on GitHub]([url](https://github.com/JNavas2/Copy-Link-Anchor-Text/issues)).
