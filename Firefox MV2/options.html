@@ -34,6 +34,14 @@
       padding: 10px 20px;
       border-radius: 5px;
       cursor: pointer;
+
+      width: 140px;             /* Narrower fixed width */
+      display: flex;            /* Use flex for centering */
+      align-items: center;      /* Vertically center text */
+      justify-content: center;  /* Horizontally center text */
+      white-space: nowrap;      /* Keep text on a single line */
+      margin-left: auto;        /* Center the button horizontally */
+      margin-right: auto;
     }
 
     /* Responsive for mobile */
@@ -44,7 +52,7 @@
         padding: 12px 8px;
       }
       button {
-        width: 100%;
+        width: 140px;        /* Keep fixed width on mobile */
         box-sizing: border-box;
       }
     }
@@ -54,24 +62,20 @@
   <h1>Welcome to Copy Link Anchor Text</h1>
   <p>This extension copies the anchor text of any link.</p>
   <ul>
-    <li><strong>Desktop:</strong> Right-click menu option or toolbar icon activates copy mode.</li>
+    <li><strong>Desktop:</strong> Use right-click menu or toolbar icon to toggle copy mode.</li>
     <li><strong>Android:</strong> Activate extension via Extensions menu, then tap a link to copy.</li>
   </ul>
-
   <div class="section">
     <label>
       <input type="checkbox" id="persistentMode" />
-      Stay in copy mode until manually turned off
+      Stay in copy mode until manually toggled off
     </label>
   </div>
-
   <div class="section">
     <h3>Privacy & Permissions</h3>
     <p>No ads, no tracking, free and open source. Clipboard access only used on copy.</p>
   </div>
-
   <button id="remove">Remove Extension</button>
-
   <script src="options.js"></script>
 </body>
 </html>

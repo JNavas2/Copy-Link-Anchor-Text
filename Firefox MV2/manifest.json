@@ -2,20 +2,15 @@
   "manifest_version": 2,
   "name": "Copy Link Anchor Text",
   "version": "1.0",
-  "description": "Copy the anchor text (link text) of any link via context menu or touch mode.",
-  "icons": {
-    "16": "images/icon-16.png",
-    "32": "images/icon-32.png",
-    "48": "images/icon-48.png",
-    "64": "images/icon-64.png",
-    "96": "images/icon-96.png",
-    "128": "images/icon-128.png"
-  },
+  "description": "Copy the anchor text (link text) of any link via context menu (desktop) or tap-to-copy mode (Android).",
+  "homepage_url": "https://github.com/JNavas2/Copy-Link-Anchor-Text",
+  "privacy_policy": "https://jnavas2.github.io/Copy-Link-Anchor-Text/privacy.html",
   "permissions": [
-    "contextMenus",
     "activeTab",
     "clipboardWrite",
-    "storage"
+    "storage",
+    "management",
+    "contextMenus"
   ],
   "background": {
     "scripts": ["background.js"],
@@ -34,5 +29,30 @@
       "matches": ["<all_urls>"],
       "js": ["content.js"]
     }
-  ]
+  ],
+  "commands": {
+    "toggle-copy-mode": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+C"
+      },
+      "description": "Toggle copy link anchor text mode"
+    }
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "copy-link-anchor-text@example.com",
+      "strict_min_version": "112.0"
+    },
+    "gecko_android": {
+      "strict_min_version": "113.0"
+    }
+  },
+  "icons": {
+    "16": "images/icon-16.png",
+    "32": "images/icon-32.png",
+    "48": "images/icon-48.png",
+    "64": "images/icon-64.png",
+    "96": "images/icon-96.png",
+    "128": "images/icon-128.png"
+  }
 }
