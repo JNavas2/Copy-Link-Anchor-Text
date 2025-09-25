@@ -1,0 +1,38 @@
+{
+  "manifest_version": 2,
+  "name": "Copy Link Anchor Text",
+  "version": "1.0",
+  "description": "Copy the anchor text (link text) of any link via context menu or touch mode.",
+  "icons": {
+    "16": "images/icon-16.png",
+    "32": "images/icon-32.png",
+    "48": "images/icon-48.png",
+    "64": "images/icon-64.png",
+    "96": "images/icon-96.png",
+    "128": "images/icon-128.png"
+  },
+  "permissions": [
+    "contextMenus",
+    "activeTab",
+    "clipboardWrite",
+    "storage"
+  ],
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
+  "browser_action": {
+    "default_icon": "images/icon-32.png",
+    "default_title": "Copy Link Anchor Text"
+  },
+  "options_ui": {
+    "page": "options.html",
+    "browser_style": true
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
+    }
+  ]
+}

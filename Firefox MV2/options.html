@@ -1,0 +1,77 @@
+<!--
+ * File: options.html of Copy Link Anchor Text extension for Firefox
+ * Description: Options page with onboarding instructions, persistent mode toggle, privacy info, and remove button.
+ * Copyright © 2025 John Navas, All Rights Reserved.
+-->
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Copy Link Anchor Text Options</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 16px;
+      max-width: 500px;
+      margin: auto;
+      background: #fafafa;
+      color: #222;
+    }
+    h1 {
+      font-size: 24px;
+      margin-bottom: 8px;
+    }
+    .section {
+      margin-top: 20px;
+    }
+    button {
+      margin-top: 20px;
+      background: #d9534f;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    /* Responsive for mobile */
+    @media (max-width: 600px) {
+      body {
+        max-width: 100%;
+        margin: 0;
+        padding: 12px 8px;
+      }
+      button {
+        width: 100%;
+        box-sizing: border-box;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>Welcome to Copy Link Anchor Text</h1>
+  <p>This extension copies the anchor text of any link.</p>
+  <ul>
+    <li><strong>Desktop:</strong> Right-click menu option or toolbar icon activates copy mode.</li>
+    <li><strong>Android:</strong> Activate extension via Extensions menu, then tap a link to copy.</li>
+  </ul>
+
+  <div class="section">
+    <label>
+      <input type="checkbox" id="persistentMode" />
+      Stay in copy mode until manually turned off
+    </label>
+  </div>
+
+  <div class="section">
+    <h3>Privacy & Permissions</h3>
+    <p>No ads, no tracking, free and open source. Clipboard access only used on copy.</p>
+  </div>
+
+  <button id="remove">Remove Extension</button>
+
+  <script src="options.js"></script>
+</body>
+</html>
