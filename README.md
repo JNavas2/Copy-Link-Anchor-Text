@@ -60,4 +60,4 @@ Copy the anchor text (link text) of any link easily via context menu or touch mo
 
 ## Support
 
-For questions, bug reports, or feature requests, please open an [issue on GitHub]([url](https://github.com/JNavas2/Copy-Link-Anchor-Text/issues)).
+For questions, bug reports, or feature requests, please open an issue on GitHub: https://github.com/JNavas2/Copy-Link-Anchor-Text/issues
