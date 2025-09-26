@@ -1,7 +1,8 @@
 # Copy Link Anchor Text - Firefox Extension
 
 Copy the anchor text (link text) of any link easily via **right-click menu** on desktop or **tap-to-copy mode** on Android.  
-On desktop, use the context menu or toolbar icon/shortcut to toggle copy mode. On Android, activate the extension through the Extensions menu, then tap a link to copy its anchor text.
+On desktop, use the context menu or toolbar icon/shortcut to toggle copy mode.   
+On Android, activate the extension through the Extensions menu, then tap a link to copy its anchor text.
 
 ---
 
@@ -10,8 +11,8 @@ On desktop, use the context menu or toolbar icon/shortcut to toggle copy mode. O
 - Copy anchor text of any link with a simple tap or right-click.
 - Context menu option on desktop platforms.
 - Toolbar icon and keyboard shortcut toggle for copy mode on desktop.
-- Supports persistent copy mode (stay ON until manually turned off).
-- Designed to work on both Desktop Firefox and Firefox for Android.
+- Supports persistent copy mode (stay ON until manually turned OFF).
+- Designed to work on both desktop Firefox and Firefox for Android.
 - Lightweight and privacy-focused with no ads or tracking.
 - Open source and free to use.
 
