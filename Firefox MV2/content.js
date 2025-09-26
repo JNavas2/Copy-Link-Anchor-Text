@@ -7,6 +7,14 @@
 
 console.log("content.js loaded");
 
+let lastRightClickedElement = null;
+let persistentCopyHandler = null; // State for the persistent mode toggle
+
+// Listen for right-clicks to accurately identify the context menu target
+document.addEventListener("contextmenu", event => {
+  lastRightClickedElement = event.target;
+}, true);
+
 // Toast UI
 function showToast(text) {
   console.log("Toast:", text);
@@ -66,12 +74,26 @@ function getAnchorText(link) {
   return text || link.href || "(No Text)";
 }
 
+// Normalization helper to make URL comparisons more robust
+function normalizeUrl(u) {
+  try {
+    const url = new URL(u, document.baseURI);
+    url.hash = ""; // Drop fragment identifiers (#...)
+    // Remove trailing slash for consistency, but only if not root path
+    if (url.pathname !== "/" && url.pathname.endsWith("/")) {
+      url.pathname = url.pathname.slice(0, -1);
+    }
+    return url.href;
+  } catch {
+    return u;
+  }
+}
+
 function findAnchorTextByUrl(url) {
+  const given = normalizeUrl(url);
   const anchors = document.querySelectorAll("a[href]");
   for (const anchor of anchors) {
-    let href = anchor.href.replace(/\/$/, "");
-    let given = url.replace(/\/$/, "");
-    if (href === given) {
+    if (normalizeUrl(anchor.href) === given) {
       return getAnchorText(anchor);
     }
   }
@@ -82,29 +104,54 @@ browser.runtime.onMessage.addListener(msg => {
   console.log("Received message:", msg);
 
   if (msg.action === "copyLinkTextByUrl" && msg.linkUrl) {
-    const anchorText = findAnchorTextByUrl(msg.linkUrl);
-    if (anchorText) {
-      copyToClipboard(anchorText);
-    } else {
-      showToast("Not a Link!");
-    }
-    return;
-  }
+    const linkElement = lastRightClickedElement ? lastRightClickedElement.closest("a") : null;
 
-  if (msg.action === "triggerCopyModeOnce") {
-    showToast("Copy Mode ON");
-    const handler = e => {
-      const link = e.target.closest("a");
-      if (link) {
-        e.preventDefault();
-        copyToClipboard(getAnchorText(link));
-        showToast("Link Anchor Text COPIED");
-        document.removeEventListener("click", handler, true);
+    if (linkElement && normalizeUrl(linkElement.href) === normalizeUrl(msg.linkUrl)) {
+      copyToClipboard(getAnchorText(linkElement));
+    } else {
+      const anchorText = findAnchorTextByUrl(msg.linkUrl);
+      if (anchorText) {
+        copyToClipboard(anchorText);
       } else {
-        showToast("Not a Link!");
-        document.removeEventListener("click", handler, true);
+        showToast("Could not find link!");
       }
-    };
-    document.addEventListener("click", handler, true);
+    }
+  } else if (msg.action === "triggerCopyModeOnce") {
+    // If a persistent handler is already active, this click is a toggle to turn it OFF.
+    if (persistentCopyHandler) {
+      document.removeEventListener("click", persistentCopyHandler, true);
+      persistentCopyHandler = null;
+      showToast("Copy Mode OFF");
+      return;
+    }
+
+    // Otherwise, this is a request to turn the mode ON.
+    // We check storage to see if it should be persistent or one-time.
+    browser.storage.local.get("persistentMode").then(data => {
+      const isPersistent = data.persistentMode || false;
+
+      const handler = e => {
+        const link = e.target.closest("a");
+        if (link) {
+          e.preventDefault();
+          copyToClipboard(getAnchorText(link));
+        } else {
+          showToast("Not a Link!");
+        }
+
+        // If not persistent, the listener removes itself after one click.
+        if (!isPersistent) {
+          document.removeEventListener("click", handler, true);
+        }
+      };
+
+      document.addEventListener("click", handler, true);
+      showToast("Copy Mode ON");
+
+      // If persistent, store the handler so the next toggle can remove it.
+      if (isPersistent) {
+        persistentCopyHandler = handler;
+      }
+    });
   }
 });
