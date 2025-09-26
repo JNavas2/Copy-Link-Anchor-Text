@@ -1,60 +1,66 @@
 /*
  * File: background.js of Copy Link Anchor Text extension for Firefox
- * Description: Manages global copy mode, onboarding, context menu (desktop), and communication with content scripts.
+ * Description: Manages global copy mode, onboarding, context menu (desktop),
+ * and communication with content scripts. Supports cross-platform activation.
  * Copyright © 2025 John Navas, All Rights Reserved.
  */
 
-let copyMode = true; // default ON for Android convenience
+console.log("background.js loading");
 
-// On install/update → show options page
-browser.runtime.onInstalled.addListener(({ reason }) => {
-  if (reason === "install" || reason === "update") {
-    browser.runtime.openOptionsPage();
-  }
-});
-
-// Add context menu only on desktop
 browser.runtime.getPlatformInfo().then(({ os }) => {
-  if (os !== "android") {
+  console.log("Platform OS:", os);
+
+  // Guard contextMenus usage — it is NOT supported on Firefox Android.
+  if (os !== "android" && browser.contextMenus) {
     browser.contextMenus.create({
       id: "copy-link-text",
       title: "Copy Link Anchor Text",
       contexts: ["link"]
     });
+    console.log("Context menu created for desktop");
+
+    browser.contextMenus.onClicked.addListener((info, tab) => {
+      console.log("Context menu clicked:", info.menuItemId, info.linkUrl);
+      if (info.menuItemId === "copy-link-text" && info.linkUrl && tab.id !== undefined) {
+        browser.tabs.sendMessage(tab.id, {
+          action: "copyLinkTextByUrl",
+          linkUrl: info.linkUrl
+        }).catch(() => {
+          console.warn("Failed to send context menu message to tab", tab.id);
+        });
+      }
+    });
+  } else {
+    console.log("Context menu not available on this platform");
   }
 });
 
-// Handle context menu clicks (desktop only)
-browser.contextMenus.onClicked.addListener((info, tab) => {
-  if (info.menuItemId === "copy-link-text" && info.linkUrl) {
-    browser.tabs.sendMessage(tab.id, {
-      action: "copyLinkTextByUrl",
-      linkUrl: info.linkUrl
-    }).catch(() => {});
+browser.runtime.onInstalled.addListener(({ reason }) => {
+  console.log("runtime.onInstalled event. Reason:", reason);
+  if (reason === "install" || reason === "update") {
+    browser.runtime.openOptionsPage();
   }
 });
 
-// Toggle copy mode
-function toggleCopyMode() {
-  copyMode = !copyMode;
-  notifyContentScripts();
-}
-
-browser.browserAction?.onClicked.addListener(toggleCopyMode);
-browser.commands.onCommand.addListener(command => {
-  if (command === "toggle-copy-mode") toggleCopyMode();
-});
-
-// Respond to queries from content scripts
-browser.runtime.onMessage.addListener(msg => {
-  if (msg.action === "getCopyMode") return Promise.resolve(copyMode);
-});
-
-// Push updates to content scripts
-function notifyContentScripts() {
-  browser.tabs.query({}).then(tabs => {
-    for (const tab of tabs) {
-      browser.tabs.sendMessage(tab.id, { action: "toggleCopyMode", state: copyMode }).catch(() => {});
-    }
+browser.browserAction.onClicked.addListener(tab => {
+  console.log("browserAction.onClicked for tab", tab.id);
+  browser.tabs.sendMessage(tab.id, { action: "triggerCopyModeOnce" }).catch(() => {
+    console.warn("Failed to send triggerCopyModeOnce message");
   });
-}
+});
+
+browser.commands.onCommand.addListener(command => {
+  console.log("command received:", command);
+  if (command === "toggle-copy-mode") {
+    browser.tabs.query({ active: true, currentWindow: true }).then(tabs => {
+      if (tabs[0]) {
+        console.log("Sending triggerCopyModeOnce to tab", tabs[0].id);
+        browser.tabs.sendMessage(tabs[0].id, { action: "triggerCopyModeOnce" }).catch(() => {
+          console.warn("Failed to send command message");
+        });
+      } else {
+        console.warn("No active tab found for command");
+      }
+    });
+  }
+});

@@ -4,7 +4,6 @@
   "version": "1.0",
   "description": "Copy the anchor text (link text) of any link via context menu (desktop) or tap-to-copy mode (Android).",
   "homepage_url": "https://github.com/JNavas2/Copy-Link-Anchor-Text",
-  "privacy_policy": "https://jnavas2.github.io/Copy-Link-Anchor-Text/privacy.html",
   "permissions": [
     "activeTab",
     "clipboardWrite",

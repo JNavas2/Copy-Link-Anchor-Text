@@ -5,19 +5,11 @@
  * Copyright © 2025 John Navas, All Rights Reserved.
  */
 
-let copyMode = false;
-let persistentMode = false;
-
-// Load saved setting + initial copy mode state
-browser.storage.local.get("persistentMode").then(data => {
-  persistentMode = data.persistentMode || false;
-});
-browser.runtime.sendMessage({ action: "getCopyMode" }).then(state => {
-  copyMode = state;
-});
+console.log("content.js loaded");
 
 // Toast UI
 function showToast(text) {
+  console.log("Toast:", text);
   const toast = document.createElement("div");
   toast.textContent = text;
   Object.assign(toast.style, {
@@ -36,8 +28,8 @@ function showToast(text) {
   setTimeout(() => toast.remove(), 1500);
 }
 
-// Clipboard write (with fallback for Android restrictions)
 function copyToClipboard(text) {
+  console.log("Attempting to copy text:", text);
   if (navigator.clipboard?.writeText) {
     navigator.clipboard.writeText(text).then(
       () => showToast("Link Anchor Text COPIED"),
@@ -64,7 +56,6 @@ function fallbackCopy(text) {
   document.body.removeChild(textarea);
 }
 
-// Extract readable link text
 function getAnchorText(link) {
   let text = link.textContent.trim();
   if (!text) text = link.getAttribute("aria-label") || link.title || "";
@@ -75,7 +66,6 @@ function getAnchorText(link) {
   return text || link.href || "(No Text)";
 }
 
-// Find anchor element by URL for context menu requests
 function findAnchorTextByUrl(url) {
   const anchors = document.querySelectorAll("a[href]");
   for (const anchor of anchors) {
@@ -88,33 +78,33 @@ function findAnchorTextByUrl(url) {
   return null;
 }
 
-// Handle messages from background.js
 browser.runtime.onMessage.addListener(msg => {
-  if (msg.action === "toggleCopyMode") {
-    copyMode = msg.state;
-    showToast(copyMode ? "Copy Mode ON" : "Copy Mode OFF");
-  } else if (msg.action === "copyLinkTextByUrl" && msg.linkUrl) {
+  console.log("Received message:", msg);
+
+  if (msg.action === "copyLinkTextByUrl" && msg.linkUrl) {
     const anchorText = findAnchorTextByUrl(msg.linkUrl);
     if (anchorText) {
       copyToClipboard(anchorText);
     } else {
       showToast("Not a Link!");
     }
+    return;
+  }
+
+  if (msg.action === "triggerCopyModeOnce") {
+    showToast("Copy Mode ON");
+    const handler = e => {
+      const link = e.target.closest("a");
+      if (link) {
+        e.preventDefault();
+        copyToClipboard(getAnchorText(link));
+        showToast("Link Anchor Text COPIED");
+        document.removeEventListener("click", handler, true);
+      } else {
+        showToast("Not a Link!");
+        document.removeEventListener("click", handler, true);
+      }
+    };
+    document.addEventListener("click", handler, true);
   }
 });
-
-// Tap-to-copy mode (Android + Desktop toolbar toggle)
-document.addEventListener("click", e => {
-  if (!copyMode) return;
-  const link = e.target.closest("a");
-  if (link) {
-    e.preventDefault();
-    copyToClipboard(getAnchorText(link));
-    if (!persistentMode) {
-      copyMode = false;
-      showToast("Copy Mode OFF");
-    }
-  } else {
-    showToast("Not a Link!");
-  }
-}, true);
