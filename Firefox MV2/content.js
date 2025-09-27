@@ -18,23 +18,45 @@ document.addEventListener("contextmenu", event => {
 // Toast UI
 function showToast(text) {
   console.log("Toast:", text);
+
   const toast = document.createElement("div");
-  toast.textContent = text;
-  Object.assign(toast.style, {
-    position: "fixed",
-    bottom: "20px",
-    left: "50%",
-    transform: "translateX(-50%)",
-    background: "#333",
-    color: "#fff",
-    padding: "6px 12px",
-    borderRadius: "4px",
-    zIndex: 999999,
-    fontSize: "14px"
-  });
+  toast.style.position = "fixed";
+  toast.style.bottom = "80px"; // closer to Android's toast position
+  toast.style.left = "50%";
+  toast.style.transform = "translateX(-50%)";
+  toast.style.background = "#e0e0e0"; // light grey background
+  toast.style.color = "#000"; // black text
+  toast.style.padding = "8px 16px";
+  toast.style.borderRadius = "24px"; // ovaled ends
+  toast.style.zIndex = 999999;
+  toast.style.fontSize = "14px";
+  toast.style.display = "inline-flex";
+  toast.style.alignItems = "center";
+  toast.style.boxShadow = "0 2px 6px rgba(0,0,0,0.2)";
+
+  // Extension icon
+  const icon = document.createElement("img");
+  icon.src = browser.runtime.getURL("images/icon-32.png");
+  icon.style.width = "20px";
+  icon.style.height = "20px";
+  icon.style.marginRight = "8px";
+
+  // Text node
+  const message = document.createElement("span");
+  message.textContent = text;
+
+  toast.appendChild(icon);
+  toast.appendChild(message);
   document.body.appendChild(toast);
-  setTimeout(() => toast.remove(), 1500);
+
+  // Timed removal with fade-out
+  setTimeout(() => {
+    toast.style.transition = "opacity 0.3s ease";
+    toast.style.opacity = "0";
+    setTimeout(() => toast.remove(), 300);
+  }, 1500);
 }
+
 
 function copyToClipboard(text) {
   console.log("Attempting to copy text:", text);

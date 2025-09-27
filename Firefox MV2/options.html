@@ -1,6 +1,6 @@
 <!--
  * File: options.html of Copy Link Anchor Text extension for Firefox
- * Description: Options page with onboarding instructions, persistent mode toggle, privacy info, and remove button.
+ * Description: Options page with onboarding instructions, persistent mode toggle, privacy info, what's new section, and remove button.
  * Copyright © 2025 John Navas, All Rights Reserved.
 -->
 
@@ -35,12 +35,12 @@
       border-radius: 5px;
       cursor: pointer;
 
-      width: 140px;             /* Narrower fixed width */
-      display: flex;            /* Use flex for centering */
-      align-items: center;      /* Vertically center text */
-      justify-content: center;  /* Horizontally center text */
-      white-space: nowrap;      /* Keep text on a single line */
-      margin-left: auto;        /* Center the button horizontally */
+      width: 140px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      white-space: nowrap;
+      margin-left: auto;
       margin-right: auto;
     }
 
@@ -52,7 +52,7 @@
         padding: 12px 8px;
       }
       button {
-        width: 140px;        /* Keep fixed width on mobile */
+        width: 140px;
         box-sizing: border-box;
       }
     }
@@ -65,16 +65,26 @@
     <li><strong>Desktop:</strong> Use right-click menu or toolbar icon to toggle copy mode.</li>
     <li><strong>Android:</strong> Activate extension via Extensions menu, then tap a link to copy.</li>
   </ul>
+
   <div class="section">
     <label>
       <input type="checkbox" id="persistentMode" />
       Stay in copy mode until manually toggled off
     </label>
   </div>
+
+  <div class="section" id="whatsNewSection">
+    <h3>What's New</h3>
+    <ul id="whatsNewList">
+      <li>Loading...</li>
+    </ul>
+  </div>
+
   <div class="section">
     <h3>Privacy & Permissions</h3>
     <p>No ads, no tracking, free and open source. Clipboard access only used on copy.</p>
   </div>
+
   <button id="remove">Remove Extension</button>
   <script src="options.js"></script>
 </body>
