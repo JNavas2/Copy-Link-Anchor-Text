@@ -1,5 +1,6 @@
 {
   "changes": [
-    "Improve toast to match Android"
+    "Non-persistent script for performance, security & privacy",
+    "Changed keyboard shortcut to Ctrl+Alt+R"
   ]
 }

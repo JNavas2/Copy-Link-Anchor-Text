@@ -1,8 +1,8 @@
 /*
  * File: background.js of Copy Link Anchor Text extension for Firefox
- * Description: Manages global copy mode, onboarding, context menu (desktop),
- * and communication with content scripts. Supports cross-platform activation.
- * Copyright © 2025 John Navas, All Rights Reserved.
+ * Description: Manages copy mode activation, onboarding, context menu (desktop),
+ * and communication with content scripts. Non-persistent for performance, privacy, and security.
+ * Copyright © 2025 John Navas
  */
 
 console.log("background.js loading");
@@ -10,14 +10,17 @@ console.log("background.js loading");
 browser.runtime.getPlatformInfo().then(({ os }) => {
   console.log("Platform OS:", os);
 
-  // Guard contextMenus usage — it is NOT supported on Firefox Android.
+  // Guard contextMenus usage — not available on Firefox Android.
   if (os !== "android" && browser.contextMenus) {
-    browser.contextMenus.create({
-      id: "copy-link-text",
-      title: "Copy Link Anchor Text",
-      contexts: ["link"]
+    // Clear old entries first to prevent duplicates across reloads.
+    browser.contextMenus.removeAll().then(() => {
+      browser.contextMenus.create({
+        id: "copy-link-text",
+        title: "Copy Link Anchor Text",
+        contexts: ["link"]
+      });
+      console.log("Context menu created for desktop");
     });
-    console.log("Context menu created for desktop");
 
     browser.contextMenus.onClicked.addListener((info, tab) => {
       console.log("Context menu clicked:", info.menuItemId, info.linkUrl);
@@ -36,7 +39,7 @@ browser.runtime.getPlatformInfo().then(({ os }) => {
 });
 
 browser.runtime.onInstalled.addListener(({ reason }) => {
-  console.log("runtime.onInstalled event. Reason:", reason);
+  console.log("runtime.onInstalled event:", reason);
   if (reason === "install" || reason === "update") {
     browser.runtime.openOptionsPage();
   }

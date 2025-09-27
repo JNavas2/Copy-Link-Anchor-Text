@@ -32,7 +32,7 @@ On Android, activate the extension through the Extensions menu, then tap a link 
 
 - **Right-click** on any link and select **"Copy Link Anchor Text"** to copy immediately.
 - Use the **toolbar icon** to toggle tap-to-copy mode; when active, clicking a link copies instead of navigating.
-- Optionally use the **keyboard shortcut** `Ctrl+Shift+C` to toggle copy mode quickly.
+- Optionally use the **keyboard shortcut** `Ctrl+Alt+R` to toggle copy mode quickly.
 
 ### Android
 

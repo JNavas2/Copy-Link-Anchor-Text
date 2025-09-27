@@ -18,9 +18,12 @@ checkbox.addEventListener("change", () => {
   browser.storage.local.set({ persistentMode: checkbox.checked });
 });
 
-// Remove extension
+// Remove extension with error handling
 removeButton.addEventListener("click", () => {
-  browser.management.uninstallSelf();
+  browser.management.uninstallSelf().catch(err => {
+    console.error("Uninstall failed:", err);
+    alert("Failed to uninstall the extension. Please uninstall it manually via about:addons.");
+  });
 });
 
 // Load What's New from whats_new.json

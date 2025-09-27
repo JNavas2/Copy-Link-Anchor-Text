@@ -1,15 +1,15 @@
 {
   "manifest_version": 2,
   "name": "Copy Link Anchor Text",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Copy the anchor text (link text) of any link via context menu (desktop) or tap-to-copy mode (Android).",
   "homepage_url": "https://github.com/JNavas2/Copy-Link-Anchor-Text",
   "permissions": [
     "activeTab",
     "clipboardWrite",
     "storage",
-    "management",
-    "contextMenus"
+    "contextMenus",
+    "management"
   ],
   "background": {
     "scripts": ["background.js"],
@@ -21,6 +21,7 @@
   },
   "options_ui": {
     "page": "options.html",
+    "open_in_tab": true,
     "browser_style": true
   },
   "content_scripts": [
@@ -32,7 +33,7 @@
   "commands": {
     "toggle-copy-mode": {
       "suggested_key": {
-        "default": "Ctrl+Shift+C"
+        "default": "Ctrl+Alt+R"
       },
       "description": "Toggle copy link anchor text mode"
     }
@@ -40,9 +41,6 @@
   "browser_specific_settings": {
     "gecko": {
       "id": "copy-link-anchor-text@example.com",
-      "strict_min_version": "112.0"
-    },
-    "gecko_android": {
       "strict_min_version": "113.0"
     }
   },
