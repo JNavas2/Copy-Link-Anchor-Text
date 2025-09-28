@@ -48,7 +48,6 @@ On Android, activate the extension through the Extensions menu, then tap a link 
 - `activeTab`: To interact with the current tab.
 - `clipboardWrite`: To copy text to the clipboard.
 - `storage`: To save persistent mode preferences.
-- `management`: To allow self-uninstall from Options.
 
 ---
 
