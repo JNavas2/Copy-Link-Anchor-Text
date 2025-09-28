@@ -1,15 +1,14 @@
 {
   "manifest_version": 2,
   "name": "Copy Link Anchor Text",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Copy the anchor text (link text) of any link via context menu (desktop) or tap-to-copy mode (Android).",
   "homepage_url": "https://github.com/JNavas2/Copy-Link-Anchor-Text",
   "permissions": [
     "activeTab",
     "clipboardWrite",
     "storage",
-    "contextMenus",
-    "management"
+    "contextMenus"
   ],
   "background": {
     "scripts": ["background.js"],
